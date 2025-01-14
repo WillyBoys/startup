@@ -19,7 +19,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ### Elevator pitch
 
-Skibidi Chat is a new way to bring the community together. It is an online chatroom that anyone can log into and chat with others logged into at that time. This room then becomes a tool to share ideas and stories with others. It is a means to invite collaboration amongst the world. Authentication is required in order to enter the chat which adds security as well as prevents scamming. This chatroom will become a new well used way to bring together ideas. 
+Skibidi Chat is a new way to bring the community together. It is an online chatroom that anyone can log into and chat with others logged into at that time. This room then becomes a tool to share ideas and stories with others. It is a means to invite collaboration amongst the world. Of course the ability to joke around and laugh is viable as well. Authentication is required in order to enter the chat which adds security as well as prevents scamming. This chatroom will become a new well used way to bring together ideas and create fresh bonds with new people. 
 
 ### Design
 
@@ -48,11 +48,11 @@ The third page is simply a list of the current users that are logged into the ch
 I am going to use the required technologies in the following ways.
 
 - **HTML** - This will be the basic structure for each of the 3 pages involved. It will provide the backbone and hold links to the other pages so long as certain criteria is met.
-- **CSS** - Applied to each page in order to make the pages look clean through good color contrast and white space, no matter the screen size.
+- **CSS** - Applied to each page in order to make the pages look clean through good color contrast and white space usage, no matter the screen size.
 - **React** - Provides the ability for login as well as redirects the user to the pages a user is accessing based upon their choices and credentials.
-- **Service** - EmojiHub is a service that I will implement into my website so that people can add some art and pizzaz to their messages
+- **Service** - EmojiHub is a service that I will implement into my website so that people can add some art and pizzazz to their messages.
 - **DB/Login** - There is a login page that is needed before being able to access the room. This information is stored in a database as well as who is currently signed in so that that information can be known by others.
-- **WebSocket** - Websocket will be used for notifying when users join and leave. It will also inform users of updates that happened server side so that the client side knows when to update the image shown or in otherwords show the new messages.
+- **WebSocket** - Websocket will be used for notifying when users join and leave the chatroom. It will also inform the client side of updates that happened server side so that the client side knows when to update the browser to show new messages.
 
 ## 🚀 AWS deliverable
 
