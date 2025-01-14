@@ -13,8 +13,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
-- [ ] Description of key features
-- [ ] Description of how you will use each technology
+- [x] Description of key features
+- [x] Description of how you will use each technology
 - [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
@@ -36,7 +36,7 @@ The third page is simply a list of the current users that are logged into the ch
 ### Key features
 
 - Secure login over HTTPS
-- Text box allowing the entry of chats
+- Text box allowing the entry of messages to be sent
 - A send button that sends the message to all those currently in the chat
 - Chats display in real time
 - Notifications appear in real time in response to users logging in and out
@@ -47,12 +47,12 @@ The third page is simply a list of the current users that are logged into the ch
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - This will be the basic structure for each of the 3 pages involved. It will provide the backbone and hold links to the other pages so long as certain criteria is met.
+- **CSS** - Applied to each page in order to make the pages look clean through good color contrast and white space, no matter the screen size.
+- **React** - Provides the ability for login as well as redirects the user to the pages a user is accessing based upon their choices and credentials.
+- **Service** - EmojiHub is a service that I will implement into my website so that people can add some art and pizzaz to their messages
+- **DB/Login** - There is a login page that is needed before being able to access the room. This information is stored in a database as well as who is currently signed in so that that information can be known by others.
+- **WebSocket** - Websocket will be used for notifying when users join and leave. It will also inform users of updates that happened server side so that the client side knows when to update the image shown or in otherwords show the new messages.
 
 ## 🚀 AWS deliverable
 
