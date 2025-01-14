@@ -1,15 +1,8 @@
-# Your startup name here
+# Skibidi Chat
 
 [My Notes](notes.md)
 
-A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-> [!NOTE]
->  This is a template for your startup application. You must modify this `README.md` file for each phase of your development. You only need to fill in the section for each deliverable when that deliverable is submitted in Canvas. Without completing the section for a deliverable, the TA will not know what to look for when grading your submission. Feel free to add additional information to each deliverable description, but make sure you at least have the list of rubric items and a description of what you did for each item.
-
-> [!NOTE]
->  If you are not familiar with Markdown then you should review the [documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) before continuing.
+Skibidi Chat is a general chat room that people can log into and log out of and just talk. Once a user registers and logs into the chatroom, they are able to chat with whoever else is currently logged in at the time. There will be a seperate page that shows who is logged in if you are looking for someone in particular. It is a simple area online for the community to be able to come together.
 
 ## 🚀 Specification Deliverable
 
@@ -18,34 +11,37 @@ A brief description of the application here. Lorem ipsum dolor sit amet, consect
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
+- [x] Proper use of Markdown
+- [x] A concise and compelling elevator pitch
 - [ ] Description of key features
 - [ ] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Skibidi Chat is a new way to bring the community together. It is an online chatroom that anyone can log into and chat with others logged into at that time. This room then becomes a tool to share ideas and stories with others. It is a means to invite collaboration amongst the world. Authentication is required in order to enter the chat which adds security as well as prevents scamming. This chatroom will become a new well used way to bring together ideas. 
 
 ### Design
 
-![Design image](placeholder.png)
+![Design image](20250114_130537.jpg)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+An individual would interact with the app in the following way:
 
-```mermaid
-sequenceDiagram
-    actor You
-    actor Website
-    You->>Website: Replace this with your design
-```
+The first page that appears is the login screen. Here the user can either login or register an account so that they are able to access the chatroom. This information is then stored in the database.
+
+The second page is the main chatroom. Here users are able to type a message on the bottom and send it and read messages as well. On the top are buttons to log out which will send the user back to the first page and remove their authentication and the sigmas button which will take the user to the third page.
+
+The third page is simply a list of the current users that are logged into the chatroom. On this page, the users are listed in the center of the page. On the top are two buttons. The first called Log Out logs the user out and takes them to the first screen. The other button is Chat and that button takes the user back to the second screen allowing them to see the chatroom again. 
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Secure login over HTTPS
+- Text box allowing the entry of chats
+- A send button that sends the message to all those currently in the chat
+- Chats display in real time
+- Notifications appear in real time in response to users logging in and out
+- All authenticated users in the chatroom show under the sigmas button
+- Login credentials are safely and persistently stored
 
 ### Technologies
 
