@@ -37,6 +37,7 @@ The third page is simply a list of the current users that are logged into the ch
 
 - Secure login over HTTPS
 - Text box allowing the entry of messages to be sent
+- Emojis will be implemented from EmojiHub
 - A send button that sends the message to all those currently in the chat
 - Chats display in real time
 - Notifications appear in real time in response to users logging in and out
