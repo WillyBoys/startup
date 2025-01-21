@@ -1,6 +1,7 @@
 # CS 260 Notes
 
 [My startup - Simon](https://simon.cs260.click)
+[Skibidi Chat](https://skibidichat.click/)
 
 ## Helpful links
 
@@ -11,8 +12,9 @@
 
 ## AWS
 
-My IP address is: 54.81.96.130
-Launching my AMI I initially put it on a private subnet. Even though it had a public IP address and the security group was right, I wasn't able to connect to it.
+My IP address is: 35.168.119.198
+- [Instances](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:)
+- [Route 53 Domains](https://us-east-1.console.aws.amazon.com/route53/domains/home?region=us-east-1#/)
 
 ## Caddy
 
