@@ -1,7 +1,7 @@
 # CS 260 Notes
 
 [My startup - Simon](https://simon.cs260.click)
-[Skibidi Chat](https://skibidichat.click/)
+[Skibidi Chat](https://startup.skibidichat.click/)
 
 ## Helpful links
 
