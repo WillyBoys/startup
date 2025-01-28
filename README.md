@@ -62,15 +62,15 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - I created three HTML pages that are linked through logging in and clicking specific buttons.
+- [x] **Proper HTML element usage** - I created the pages utilizing headers, bodies, buttons, and several links and inputs.
+- [x] **Links** - I linked the pages via buttons that you push.
+- [x] **Text** - I added the necessary text to have a title as well as show what each button does.
+- [x] **3rd party API placeholder** - I added an emoji button that will be the Third Party API to EmojiHub.
+- [x] **Images** - I added the image of the logo into all of my pages as well as added it as a Favicon on the tab in the browser.
+- [x] **Login placeholder** - The first page is the login page and you have to put at least something in before moving to the next page.
+- [x] **DB data placeholder** - There is a whole page that will list the users that are currently in the chatroom. This will also stand out more once the CSS is implemented.
+- [x] **WebSocket placeholder** - I added a spot where the chat will take place. This is where the chatting will take place and will be more visible after implementing CSS.
 
 ## 🚀 CSS deliverable
 
