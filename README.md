@@ -72,6 +72,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **DB data placeholder** - There is a whole page that will list the users that are currently in the chatroom. This will also stand out more once the CSS is implemented.
 - [x] **WebSocket placeholder** - I added a spot where the chat will take place. This is where the chatting will take place and will be more visible after implementing CSS.
 
+![HTML Stage](SkibidiChatHTML.png)
+
 ## 🚀 CSS deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
