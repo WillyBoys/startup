@@ -208,22 +208,6 @@ body {
   transform: translate(-50%, -50%);
 }
 
-.ball {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  content: '';
-  display: block;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .5);
-  z-index: 2;
-  margin-top: 4px;
-  animation: ball .45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
-}
-
 
 /*--------------------
   Body
@@ -264,7 +248,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px;
+  width: clamp(300px, 80%, 900px);
   height: 80vh;
   max-height: 500px;
   z-index: 2;
@@ -536,7 +520,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px;
+  width: clamp(300px, 80%, 900px);
   height: 80vh;
   max-height: 500px;
   z-index: 2;
