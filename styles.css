@@ -73,13 +73,16 @@ main {
   transition: all 0.3s ease-in-out;
 }
 
-.footer {
+.footer-github {
   font-family: "Roboto", sans-serif;
   font-size: 1.5rem;
   color: #122F4D;
   text-align: center;
-  padding: 10px;
-  position: relative;
+  padding: 5px;
+  position: fixed;
+  bottom: 40px;
+  left: 0px;
+  width: 100%;
 }
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
@@ -91,24 +94,36 @@ main {
 }
 
 .form {
-  position: relative;
-  z-index: 1;
-  background: #FFFFFF;
-  max-width: 360px;
-  margin: 0 auto 100px;
-  padding: 45px;
-  text-align: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(100px, 80%, 400px);
+  height: 50vh;
+  max-height: 500px;
+  z-index: 2;
+  overflow: hidden;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, .2);
+  background: rgba(0, 0, 0, .5);
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
 }
 
 .form input {
   font-family: "Roboto", sans-serif;
   outline: 0;
   background: #f2f2f2;
-  width: 100%;
-  border: 0;
-  margin: 0 0 15px;
+  display: flex;
+  width: 70%;
+  border: 10px;
+  top: 50%;
+  margin: 15px auto 15px;
   padding: 15px;
+  border-radius: 20px;
   box-sizing: border-box;
   font-size: 14px;
 }
@@ -118,14 +133,19 @@ main {
   text-transform: uppercase;
   outline: 0;
   background: #4CAF50;
-  width: 100%;
-  border: 0;
+  display: flex;
+  width: 70%;
+  border: 10px;
+  margin: 15px auto 15px;
   padding: 15px;
+  border-radius: 20px;
   color: #FFFFFF;
   font-size: 14px;
+  text-align: center;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
 .form button:hover,
@@ -135,7 +155,9 @@ main {
 }
 
 .form .message {
-  margin: 15px 0 0;
+  display: flex;
+  justify-content: center;
+  margin: 15px auto 15px;
   color: #b3b3b3;
   font-size: 12px;
 }
@@ -353,7 +375,6 @@ body {
     width: 100%;
   }
 
-
   .message {
     clear: both;
     float: left;
@@ -404,9 +425,10 @@ body {
 
     &.message-personal {
       float: right;
-      color: #fff;
+      color: #000000;
       text-align: right;
-      background: linear-gradient(120deg, #248A52, #257287);
+      right: 35px;
+      background: linear-gradient(120deg, #FFCB1F, #2DD3F8);
       border-radius: 10px 10px 0 10px;
 
       &::before {
