@@ -63,9 +63,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [x] **HTML pages** - I created three HTML pages that are linked through logging in and clicking specific buttons.
-- [x] **Proper HTML element usage** - I created the pages utilizing headers, bodies, buttons, and several links and inputs.
+- [x] **Proper HTML element usage** - I created the pages utilizing headers, bodies, buttons, and several links and inputs. I also added a footer on the login page as well as a nav in the users and chat pages
 - [x] **Links** - I linked the pages via buttons that you push.
-- [x] **Text** - I added the necessary text to have a title as well as show what each button does.
+- [x] **Text** - I added the necessary text to have a title as well as show what each button does. I also added some generic text in the chat to showcase the style as well as the users page
 - [x] **3rd party API placeholder** - I added an emoji button that will be the Third Party API to EmojiHub.
 - [x] **Images** - I added the image of the logo into all of my pages as well as added it as a Favicon on the tab in the browser.
 - [x] **Login placeholder** - The first page is the login page and you have to put at least something in before moving to the next page.
@@ -78,12 +78,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Header, footer, and main content body** - I did not complete this part of the deliverable.
-- [ ] **Navigation elements** - I did not complete this part of the deliverable.
-- [ ] **Responsive to window resizing** - I did not complete this part of the deliverable.
-- [ ] **Application elements** - I did not complete this part of the deliverable.
-- [ ] **Application text content** - I did not complete this part of the deliverable.
-- [ ] **Application images** - I did not complete this part of the deliverable.
+- [x] **Header, footer, and main content body** - I added CSS styles to the header which includes the title and logo. For the body, I added the login form as well as the chat box and users box. I then added the link to my Github in the footer of the login page
+- [x] **Navigation elements** - I added these on the users and chat pages. The Chat header is the nav bar with navigation to all the pages. 
+- [x] **Responsive to window resizing** - I made the elements responsive so that they shrink and sometimes disappear depending on the size of the window.
+- [x] **Application elements** - I organized the CSS into elements that can be applied to multiple HTML elements. 
+- [x] **Application text content** - I added text boxes where text can be entered as well as example text to showcase the styles of different elements
+- [x] **Application images** - I inserted the Logo as an image into the header and made it responsive
 
 ## 🚀 React part 1: Routing deliverable
 
