@@ -85,6 +85,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Application text content** - I added text boxes where text can be entered as well as example text to showcase the styles of different elements
 - [x] **Application images** - I inserted the Logo as an image into the header and made it responsive
 
+![CSS Login](CSSLogin.png)
+![CSS Chat](CSSChat.png)
+
 ## 🚀 React part 1: Routing deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
