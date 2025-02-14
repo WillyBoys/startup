@@ -92,9 +92,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Bundled using Vite** - I did not complete this part of the deliverable.
-- [ ] **Components** - I did not complete this part of the deliverable.
-- [ ] **Router** - Routing between login and voting components.
+- [x] **Bundled using Vite** - I completed this part of the lab by installing Vite and using the npm init command to bring it all together. Everything is bundled into Vite
+- [x] **Components** - I moved everything into the .jsx files so that React is the one that is controlling everything and not just HTML and CSS
+- [x] **Router** - All of the pages are routed together using the React Router. Each page no longer shows that they are linked to HTML files and the hrefs have all been changed to NavLinks.
 
 ## 🚀 React part 2: Reactivity
 
