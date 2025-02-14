@@ -10,7 +10,7 @@ import { Users } from './users/users';
 export default function App() {
     return (
         <BrowserRouter>
-            <div className="body bg-dark text-light">
+            <div>
                 <header>
                     <h1 id="title">SkibidiChat</h1>
                     <img src="Logo1.png" alt="SkibidiChat Logo" id="logo"></img>
