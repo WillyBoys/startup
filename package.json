@@ -4,20 +4,14 @@
   "description": "[My Notes](notes.md)",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/WillyBoys/startup.git"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/WillyBoys/startup/issues"
-  },
-  "homepage": "https://github.com/WillyBoys/startup#readme",
   "devDependencies": {
     "vite": "^6.1.0"
   }
