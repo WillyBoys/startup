@@ -4,6 +4,7 @@ import '../app.css';
 import { useNavigate } from 'react-router-dom';
 
 export function Login({ setUser }) {
+    // These are useState hooks
     const [name, setName] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [email, setEmail] = React.useState('');
