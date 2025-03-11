@@ -3,7 +3,11 @@ import '../app.css';
 
 import { useNavigate } from 'react-router-dom';
 
-export function Login() {
+export function Login({ setUser }) {
+    const [name, setName] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [email, setEmail] = React.useState('');
+
     const [isRegistering, setIsRegistering] = React.useState(false);
     const navigate = useNavigate();
 
@@ -13,7 +17,23 @@ export function Login() {
 
     const handleLogin = () => {
         // Here is the authentication logic
-        navigate('/chat');
+        console.log(name + ' is logged in');
+        localStorage.setItem('username', name);
+        localStorage.setItem('email', email);
+        setUser(name);
+        navigate('/chat', { state: { username: name } });
+    }
+
+    function nameHandler(e) {
+        setName(e.target.value);
+    }
+
+    function passwordHandler(e) {
+        setPassword(e.target.value);
+    }
+
+    function emailHandler(e) {
+        setEmail(e.target.value);
     }
 
     return (
@@ -21,9 +41,9 @@ export function Login() {
             <div className="login-page">
                 <div className={`form ${isRegistering ? 'register' : 'login'}`}>
                     <form className="register-form" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
-                        <input type="text" placeholder="name" />
-                        <input type="password" placeholder="password" />
-                        <input type="text" placeholder="email address" />
+                        <input type="text" onChange={nameHandler} placeholder="name" />
+                        <input type="password" onChange={passwordHandler} placeholder="password" />
+                        <input type="text" onChange={emailHandler} placeholder="email address" />
                         <button type="submit">create</button>
                         <p className="message">
                             Already registered? &nbsp;
@@ -33,8 +53,8 @@ export function Login() {
 
 
                     <form className="login-form" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
-                        <input type="text" placeholder="username" />
-                        <input type="password" placeholder="password" />
+                        <input type="text" onChange={nameHandler} placeholder="username" />
+                        <input type="password" onChange={passwordHandler} placeholder="password" />
                         <button type="submit">login</button>
                         <p className="message">
                             Not registered? &nbsp;

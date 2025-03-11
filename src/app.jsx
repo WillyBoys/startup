@@ -8,6 +8,7 @@ import { Chat } from './chat/chat';
 import { Users } from './users/users';
 
 export default function App() {
+    const [user, setUser] = React.useState(localStorage.getItem('username') || null);
     return (
         <BrowserRouter>
             <div>
@@ -17,7 +18,7 @@ export default function App() {
                 </header>
 
                 <Routes>
-                    <Route path='/' element={<Login />} exact />
+                    <Route path='/' element={<Login setUser={setUser} />} exact />
                     <Route path='/chat' element={<Chat />} />
                     <Route path='/users' element={<Users />} />
                     <Route path='*' element={<NotFound />} />
