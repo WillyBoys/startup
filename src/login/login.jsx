@@ -1,31 +1,45 @@
 import React from 'react';
 import '../app.css';
-//import '../script.js';
 
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
-import { Chat } from '../chat/chat';
+import { useNavigate } from 'react-router-dom';
 
 export function Login() {
+    const [isRegistering, setIsRegistering] = React.useState(false);
+    const navigate = useNavigate();
+
+    const toggleForm = () => {
+        setIsRegistering(!isRegistering);
+    }
+
+    const handleLogin = () => {
+        // Here is the authentication logic
+        navigate('/chat');
+    }
+
     return (
         <main>
             <div className="login-page">
-                <div className="form">
-                    <form className="register-form">
+                <div className={`form ${isRegistering ? 'register' : 'login'}`}>
+                    <form className="register-form" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
                         <input type="text" placeholder="name" />
                         <input type="password" placeholder="password" />
                         <input type="text" placeholder="email address" />
-                        <NavLink to="/chat">
-                            <button type="button" onclick="window.location.href='chat.html'">create</button>
-                        </NavLink>
-                        <p className="message">Already registered? &nbsp;<a href="#">Sign In</a></p>
+                        <button type="submit">create</button>
+                        <p className="message">
+                            Already registered? &nbsp;
+                            <a href="#" onClick={toggleForm}>Sign In</a>
+                        </p>
                     </form>
-                    <form className="login-form">
+
+
+                    <form className="login-form" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
                         <input type="text" placeholder="username" />
                         <input type="password" placeholder="password" />
-                        <NavLink to="/chat">
-                            <button type="button" onclick="window.location.href='chat.html'">login</button>
-                        </NavLink>
-                        <p className="message">Not registered? &nbsp;<a href="#">Create an account</a></p>
+                        <button type="submit">login</button>
+                        <p className="message">
+                            Not registered? &nbsp;
+                            <a href="#" onClick={toggleForm}>Create an account</a>
+                        </p>
                     </form>
                 </div>
             </div>
