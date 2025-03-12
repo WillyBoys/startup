@@ -16,6 +16,7 @@ export function Chat() {
     ]);
 
     const [newMessage, setNewMessage] = useState('');
+    const messagesContainerRef = useRef(null);
     const messagesEndRef = useRef(null);
 
     const handleSendMessage = () => {
@@ -32,9 +33,9 @@ export function Chat() {
         // Websocket Placeholder
         console.log("Message send: ", messageData.text);
 
-        setTimeout(() => {
-            messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-        }, 100);
+        // setTimeout(() => {
+        //     messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+        // }, 100);
     };
 
     const handleKeyDown = (e) => {
@@ -46,7 +47,9 @@ export function Chat() {
 
     // Auto-scroll to the bottom of the chat
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
     }, [messages]);
 
     return (
@@ -57,7 +60,7 @@ export function Chat() {
                     <NavLink to="/users"><button className="sigmas">Sigmas</button></NavLink>
                     <NavLink to="/"><button className="logout">Logout</button></NavLink>
                 </nav>
-                <div className="messages">
+                <div className="messages" ref={messagesContainerRef}>
                     {messages.map((message, index) => (
                         <div key={index} className={`message ${message.sender === 'self' ? 'message-personal' : 'other'}`}>
                             {message.text}
