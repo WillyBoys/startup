@@ -51,10 +51,6 @@ export function Chat() {
 
     return (
         <div>
-            <header>
-                <h1 id="title">SkibidiChat</h1>
-                <img src="Logo1.png" alt="SkibidiChat Logo" id="logo"></img>
-            </header>
             <div className="chat">
                 <nav className="chat-title">
                     <h2 className="sigmas-title">{user}</h2>
@@ -75,9 +71,9 @@ export function Chat() {
                         className="message-input"
                         placeholder="Type message..."
                         value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}>
+                        onChange={(e) => setNewMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
-                    </textarea>
+                    ></textarea>
                     <button className="message-submit" onClick={handleSendMessage}>Send</button>
                     <button className="message-emoji">Emojis</button>
 
