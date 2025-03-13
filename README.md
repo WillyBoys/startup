@@ -100,8 +100,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [x] **All functionality implemented or mocked out** - I added the two forms to login or sign up and a transition between the two. I also made the JS check for the correct email entered into email as well as a limit for usernames and passwords. I also added the chat features where you can send messages and they appear in the chat box. There is also an automated message that sends as a placeholder for the websocket. I also have the emoji button doing console.log as a placeholder for the API that I will later implement. The user logged in is stored in the local storage and so is the email if you go through the create form.
+- [x] **Hooks** - I used useState in order to store the username and access that throughout the website. There are also useEffect statements that are designed for the auto scrolling feature as well as the automated messages that appear in the chatbox. There is also a useEffect that simulates people coming and going in the users page.
 
 ## 🚀 Service deliverable
 
