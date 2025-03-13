@@ -8,12 +8,12 @@ export function Chat() {
     const user = location.state?.username || localStorage.getItem('username');
 
     // Using State to store messages
-    // const [messages, setMessages] = useState([
-    //     { text: 'Heyo', sender: 'self', senderName: user },
-    //     { text: 'What up', sender: 'other', senderName: 'TheRizzler' },
-    //     { text: 'Skibidi Ohio Rizz', sender: 'self', senderName: user },
-    //     { text: 'Lmao', sender: 'other', senderName: 'TheRizzler' }
-    // ]);
+    const [messages, setMessages] = useState([
+        { text: 'Heyo', sender: 'self', senderName: user },
+        { text: 'What up', sender: 'other', senderName: 'TheRizzler' },
+        { text: 'Skibidi Ohio Rizz', sender: 'self', senderName: user },
+        { text: 'Lmao', sender: 'other', senderName: 'TheRizzler' }
+    ]);
 
     const [newMessage, setNewMessage] = useState('');
     const messagesContainerRef = useRef(null);
