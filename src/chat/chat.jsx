@@ -58,6 +58,21 @@ export function Chat() {
         }
     }, [messages]);
 
+    // Simulated WebSocket messages
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const messageData = {
+                text: 'This is a test message',
+                sender: 'other',
+                senderName: 'TheRizzler'
+            };
+
+            setMessages(prevMessages => [...prevMessages, messageData]);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div>
             <div className="chat">
