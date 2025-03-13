@@ -1,10 +1,14 @@
 import React from 'react';
 import '../app.css';
 
+import { useLocation } from 'react-router-dom';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Chat } from '../chat/chat';
 
 export function Users() {
+    const location = useLocation();
+    const user = location.state?.username || localStorage.getItem('username');
+
     return (
         <body>
             <header>
@@ -18,8 +22,8 @@ export function Users() {
                         <NavLink to="/chat"><button className="logout">Return to Chat</button></NavLink>
                     </nav>
                     <ul>
-                        <li className="user">User 1</li>
-                        <li className="user">User 2</li>
+                        <li className="user">{user}</li>
+                        <li className="user">TheRizzler</li>
                         <li className="user">User 3</li>
                     </ul>
                 </div>

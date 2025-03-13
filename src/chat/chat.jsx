@@ -46,6 +46,11 @@ export function Chat() {
         }
     };
 
+    const handleEmojis = () => {
+        // Placeholder for emoji functionality
+        console.log("(: Emoji button clicked :)");
+    }
+
     // Auto-scroll to the bottom of the chat
     useEffect(() => {
         if (messagesContainerRef.current) {
@@ -80,7 +85,7 @@ export function Chat() {
                         onKeyDown={handleKeyDown}
                     ></textarea>
                     <button className="message-submit" onClick={handleSendMessage}>Send</button>
-                    <button className="message-emoji">Emojis</button>
+                    <button className="message-emoji" onClick={handleEmojis}>Emojis</button>
 
                 </div>
             </div>
