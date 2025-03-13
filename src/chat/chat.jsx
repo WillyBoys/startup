@@ -62,7 +62,7 @@ export function Chat() {
     useEffect(() => {
         const interval = setInterval(() => {
             const messageData = {
-                text: 'This is a test message',
+                text: 'We have been trying to reach you about your cars extended warranty',
                 sender: 'other',
                 senderName: 'TheRizzler'
             };
