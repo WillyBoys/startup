@@ -244,6 +244,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.error {
+  color: red;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 /* HERE IS THE CSS FOR THE CHAT PAGE */
 
 .center {
