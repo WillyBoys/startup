@@ -9,10 +9,10 @@ export function Chat() {
 
     // Using State to store messages
     const [messages, setMessages] = useState([
-        { text: 'Heyo', sender: 'self' },
-        { text: 'What up', sender: 'other' },
-        { text: 'Skibidi Ohio Rizz', sender: 'self' },
-        { text: 'Lmao', sender: 'other' }
+        { text: 'Heyo', sender: 'self', senderName: user },
+        { text: 'What up', sender: 'other', senderName: 'TheRizzler' },
+        { text: 'Skibidi Ohio Rizz', sender: 'self', senderName: user },
+        { text: 'Lmao', sender: 'other', senderName: 'TheRizzler' }
     ]);
 
     const [newMessage, setNewMessage] = useState('');
@@ -24,7 +24,8 @@ export function Chat() {
 
         const messageData = {
             text: newMessage,
-            sender: 'self'
+            sender: 'self',
+            senderName: user
         };
 
         setMessages(prevMessages => [...prevMessages, messageData]); // Update state with new message
@@ -63,6 +64,7 @@ export function Chat() {
                 <div className="messages" ref={messagesContainerRef}>
                     {messages.map((message, index) => (
                         <div key={index} className={`message ${message.sender === 'self' ? 'message-personal' : 'other'}`}>
+                            <strong>{message.senderName}: </strong>
                             {message.text}
                         </div>
                     ))}
