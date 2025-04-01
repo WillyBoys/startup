@@ -25,7 +25,7 @@ export default function App() {
                 </Routes>
 
                 <footer>
-                    <div class="footer-github">
+                    <div className="footer-github">
                         <a href="https://github.com/WillyBoys/startup">Github Here!</a>
                     </div>
                 </footer>

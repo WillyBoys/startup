@@ -1,17 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../app.css';
-
 import { useNavigate } from 'react-router-dom';
 
 export function Login({ setUser }) {
-    // These are useState hooks
-    const [name, setName] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [error, setError] = React.useState('');
-
-    const [isRegistering, setIsRegistering] = React.useState(false);
     const navigate = useNavigate();
+
+    //Hooks for the useState components
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        async function checkSession() {
+            setIsLoading(true); // Set loading to true before checking session
+
+            try {
+                const response = await fetch('/api/session', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setUser(data.username);
+                    navigate('/chat', { state: { username: data.username } });
+                }
+            } catch (error) {
+                console.error("Session check failed:", error);
+            } finally {
+                setIsLoading(false); // Set loading to false after checking session
+            }
+        }
+        checkSession();
+    }, [navigate, setUser]);
+
+    if (isLoading) {
+        return <p>Loading...</p>
+    }
 
     const toggleForm = () => {
         setIsRegistering(!isRegistering);
@@ -36,19 +63,18 @@ export function Login({ setUser }) {
 
     const handleLogin = async () => {
         if (!validateInputs()) return;
-
         try {
             const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: name, password }),
+                body: JSON.stringify({ username: name, password: password }),
             });
 
             const data = await response.json();
             if (response.ok) {
                 localStorage.setItem('username', data.username);
                 setUser(data.username);
-                navigate('/chat', { state: { username: data.username } });
+                setTimeout(() => navigate('/chat', { state: { username: data.username } }), 0);
             } else {
                 setError(data.message || 'Login failed');
             }
@@ -64,7 +90,7 @@ export function Login({ setUser }) {
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: name, email, password }),
+                body: JSON.stringify({ username: name, password: password, email: email }),
             });
 
             const data = await response.json();
@@ -78,18 +104,6 @@ export function Login({ setUser }) {
             setError('Server error. Try again later.');
         }
     };
-
-    function nameHandler(e) {
-        setName(e.target.value);
-    }
-
-    function passwordHandler(e) {
-        setPassword(e.target.value);
-    }
-
-    function emailHandler(e) {
-        setEmail(e.target.value);
-    }
 
     return (
         <main>

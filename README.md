@@ -107,9 +107,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - I packaged everything into the service directory and have it so that the service can run and handle different endpoints that connect.
+- [x] **Static middleware for frontend** - I have mine set up so that express serves files from the public folder
+- [x] **Calls to third party endpoints** - My emoji button calls another API and presents them for selection for the user
 - [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
 - [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
 

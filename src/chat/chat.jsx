@@ -1,18 +1,42 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '../app.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
 export function Chat() {
-    const location = useLocation();
-    const user = location.state?.username || localStorage.getItem('username');
-
-    // Using State to store messages
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const messagesContainerRef = useRef(null);
     const messagesEndRef = useRef(null);
     const ws = useRef(null); // WebSocket reference
+
+    const location = useLocation();
+    const user = location.state?.username || localStorage.getItem('username');
+
+    const [emojiList, setEmojiList] = useState([]);
+    const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
+
+    useEffect(() => {
+        async function checkSession() {
+            try {
+                const response = await fetch('/api/session', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                if (!response.ok) {
+                    navigate('/'); // Redirect to login if not authenticated
+                }
+            } catch (error) {
+                console.error("Session check failed:", error);
+                navigate('/');
+            } finally {
+                setIsLoading(false); // Set loading to false after checking session
+            }
+        }
+        checkSession();
+    }, [navigate]);
 
     useEffect(() => {
         // Initialize WebSocket connection
@@ -41,6 +65,40 @@ export function Chat() {
             ws.current.close(); // Close the WebSocket connection on unmount
         };
     }, []);
+
+    // Auto-scroll to the bottom of the chat
+    useEffect(() => {
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+    }, [messages]);
+
+    if (isLoading) {
+        return <p>Loading...</p>
+    }
+
+    async function handleEmojis() {
+        if (emojiList.length === 0) {
+            setEmojiPickerVisible(true); // Show loading state immediately
+            try {
+                const response = await fetch('https://emoji-api.com/emojis?access_key=bb33e72d890412c5f92b8dcaaea735ad7f8ef940');
+                if (!response.ok) throw new Error('Failed to fetch emojis');
+                const data = await response.json();
+                setEmojiList(data.slice(0, 100)); // Take only first 100 emojis
+            } catch (error) {
+                console.error("Error fetching emojis:", error);
+            }
+        } else {
+            // If already loaded, just toggle visibility
+            setEmojiPickerVisible(true);
+        }
+    }
+
+    // Function to add emoji to message
+    function addEmojiToMessage(emoji) {
+        setNewMessage((prev) => prev + emoji.character);
+        setEmojiPickerVisible(false); // Hide emoji picker
+    }
 
     const handleSendMessage = () => {
         if (newMessage.trim() === '') return; // Can't send empty messages
@@ -88,34 +146,6 @@ export function Chat() {
             console.error('Error logging out:', error);
         }
     };
-
-    const [emojiList, setEmojiList] = useState([]);
-    const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
-
-    async function handleEmojis() {
-        try {
-            const response = await fetch('https://emoji-api.com/emojis?access_key=bb33e72d890412c5f92b8dcaaea735ad7f8ef940');
-            if (!response.ok) throw new Error('Failed to fetch emojis');
-            const data = await response.json();
-            setEmojiList(data); // Save emojis in state
-            setEmojiPickerVisible(true); // Show emoji picker UI
-        } catch (error) {
-            console.error("Error fetching emojis:", error);
-        }
-    }
-
-    // Function to add emoji to message
-    function addEmojiToMessage(emoji) {
-        setNewMessage((prev) => prev + emoji.character);
-        setEmojiPickerVisible(false); // Hide emoji picker
-    }
-
-    // Auto-scroll to the bottom of the chat
-    useEffect(() => {
-        if (messagesContainerRef.current) {
-            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
-        }
-    }, [messages]);
 
     return (
         <div>

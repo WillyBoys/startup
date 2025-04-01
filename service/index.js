@@ -14,7 +14,7 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.use(express.json());
 app.use(express.static('public')); // Serve static files
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({ credentials: true }));
 
 app.get("/", (req, res) => {
   res.send("I'm watching you!");
@@ -23,18 +23,23 @@ app.get("/", (req, res) => {
 const users = {};   // Store user credentials (in-memory for now)
 const sessions = {}; // Track logged-in users
 
+const apiRouter = express.Router();
+app.use(`/api`, apiRouter);
+
 // Authentication Routes
-app.post('/api/register', (req, res) => {
-  const { username, password } = req.body;
+apiRouter.post('/register', (req, res) => {
+  const { username, password, email } = req.body;
   if (users[username]) return res.status(400).json({ error: 'User already exists' });
 
-  users[username] = bcrypt.hashSync(password, 10);
+  users[username] = { password: bcrypt.hashSync(password, 10), email };
   res.json({ success: true });
 });
 
-app.post('/api/login', (req, res) => {
-  const { username, password } = req.body;
-  if (!users[username] || !bcrypt.compareSync(password, users[username])) {
+apiRouter.post('/login', (req, res) => {
+  console.log("Login attempt:", req.body);
+  const username = req.body.username;
+  const password = req.body.password;
+  if (!users[username] || !bcrypt.compareSync(password, users[username].password)) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
 
@@ -44,11 +49,19 @@ app.post('/api/login', (req, res) => {
   res.json({ success: true });
 });
 
-app.post('/api/logout', (req, res) => {
+apiRouter.post('/logout', (req, res) => {
   const sessionId = req.cookies.sessionId;
   delete sessions[sessionId];
   res.clearCookie('sessionId');
   res.json({ success: true });
+});
+
+apiRouter.get('/session', (req, res) => {
+  const sessionId = req.cookies.sessionId;
+  if (!sessions[sessionId]) {
+    return res.status(401).json({ error: 'Not logged in' });
+  }
+  res.json({ username: sessions[sessionId] });
 });
 
 // WebSocket Server for Real-Time Chat
