@@ -34,17 +34,50 @@ export function Login({ setUser }) {
         return true;
     };
 
-    const handleLogin = () => {
-        // Validate inputs before proceeding
+    const handleLogin = async () => {
         if (!validateInputs()) return;
 
-        // Here is the authentication logic
-        console.log(name + ' is logged in');
-        localStorage.setItem('username', name);
-        localStorage.setItem('email', email);
-        setUser(name);
-        navigate('/chat', { state: { username: name } });
-    }
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: name, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                localStorage.setItem('username', data.username);
+                setUser(data.username);
+                navigate('/chat', { state: { username: data.username } });
+            } else {
+                setError(data.message || 'Login failed');
+            }
+        } catch (err) {
+            setError('Server error. Try again later.');
+        }
+    };
+
+    const handleRegister = async () => {
+        if (!validateInputs()) return;
+
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: name, email, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                setError('Registration successful! Please log in.');
+                setIsRegistering(false);
+            } else {
+                setError(data.message || 'Registration failed');
+            }
+        } catch (err) {
+            setError('Server error. Try again later.');
+        }
+    };
 
     function nameHandler(e) {
         setName(e.target.value);
@@ -62,7 +95,7 @@ export function Login({ setUser }) {
         <main>
             <div className="login-page">
                 <div className={`form ${isRegistering ? 'register' : 'login'}`}>
-                    <form className="register-form" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+                    <form className="register-form" onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
                         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name (3-15 chars)" maxLength="15" />
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (6-20 chars)" maxLength="20" />
                         <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
