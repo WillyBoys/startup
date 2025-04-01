@@ -615,3 +615,67 @@ body {
   font-family: "Roboto", sans-serif;
   font-size: clamp(.5rem, 5vw, 1rem);
 }
+
+
+/* --------------------
+  Emoji Picker
+  --------------------*/
+
+.emoji-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /* Dim background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Emoji Picker Box */
+.emoji-picker {
+  background: linear-gradient(120deg, #FFCB1F, #2DD3F8);
+  width: 300px;
+  height: 400px;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Scrollable Container */
+.emoji-container {
+  width: 100%;
+  height: 90%;
+  overflow-y: auto;
+  /* Enables scrolling */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 5px;
+}
+
+/* Emoji Buttons */
+.emoji-btn {
+  font-size: 2rem;
+  /* Makes emojis bigger */
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  margin: 5px;
+}
+
+/* Close Button */
+.close-btn {
+  align-self: flex-end;
+  border: none;
+  background: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 5px;
+}

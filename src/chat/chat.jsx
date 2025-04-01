@@ -67,12 +67,35 @@ export function Chat() {
         }
     };
 
+    // Handle the logout feature
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/api/logout', {
+                method: 'POST',
+                credentials: 'include', // Ensures cookies (session) are included
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                localStorage.removeItem('username'); // Clear stored username
+                window.location.href = '/'; // Redirect to login/homepage
+            } else {
+                console.error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    };
+
     const [emojiList, setEmojiList] = useState([]);
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
     async function handleEmojis() {
         try {
-            const response = await fetch('https://emojihub.xyz/api/all');
+            const response = await fetch('https://emoji-api.com/emojis?access_key=bb33e72d890412c5f92b8dcaaea735ad7f8ef940');
+            if (!response.ok) throw new Error('Failed to fetch emojis');
             const data = await response.json();
             setEmojiList(data); // Save emojis in state
             setEmojiPickerVisible(true); // Show emoji picker UI
@@ -94,28 +117,15 @@ export function Chat() {
         }
     }, [messages]);
 
-    // Simulated WebSocket messages
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         const messageData = {
-    //             text: 'We have been trying to reach you about your cars extended warranty',
-    //             sender: 'other',
-    //             senderName: 'TheRizzler'
-    //         };
-
-    //         setMessages(prevMessages => [...prevMessages, messageData]);
-    //     }, 5000);
-
-    //     return () => clearInterval(interval);
-    // }, []);
-
     return (
         <div>
             <div className="chat">
                 <nav className="chat-title">
                     <h2 className="sigmas-title">{user}</h2>
                     <NavLink to="/users"><button className="sigmas">Sigmas</button></NavLink>
-                    <NavLink to="/"><button className="logout">Logout</button></NavLink>
+                    <NavLink to="/" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
+                        <button className="logout">Logout</button>
+                    </NavLink>
                 </nav>
                 <div className="messages" ref={messagesContainerRef}>
                     {messages.map((message, index) => (
@@ -137,8 +147,21 @@ export function Chat() {
                     ></textarea>
                     <button className="message-submit" onClick={handleSendMessage}>Send</button>
                     <button className="message-emoji" onClick={handleEmojis}>Emojis</button>
-
                 </div>
+                {isEmojiPickerVisible && (
+                    <div className="emoji-modal">
+                        <div className="emoji-picker">
+                            <button className="close-btn" onClick={() => setEmojiPickerVisible(false)}>✖</button>
+                            <div className="emoji-container">
+                                {emojiList.map((emoji, index) => (
+                                    <button key={index} className="emoji-btn" onClick={() => addEmojiToMessage(emoji)}>
+                                        {emoji.character}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="bg"></div>
         </div>
