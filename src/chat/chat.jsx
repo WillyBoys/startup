@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, use } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../app.css';
 import { useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
@@ -8,16 +8,39 @@ export function Chat() {
     const user = location.state?.username || localStorage.getItem('username');
 
     // Using State to store messages
-    const [messages, setMessages] = useState([
-        { text: 'Heyo', sender: 'self', senderName: user },
-        { text: 'What up', sender: 'other', senderName: 'TheRizzler' },
-        { text: 'Skibidi Ohio Rizz', sender: 'self', senderName: user },
-        { text: 'Lmao', sender: 'other', senderName: 'TheRizzler' }
-    ]);
-
+    const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const messagesContainerRef = useRef(null);
     const messagesEndRef = useRef(null);
+    const ws = useRef(null); // WebSocket reference
+
+    useEffect(() => {
+        // Initialize WebSocket connection
+        ws.current = new WebSocket('ws://localhost:4001'); // Adjust the WebSocket URL if needed
+
+        ws.current.onopen = () => {
+            console.log('Connected to WebSocket');
+        };
+
+        ws.current.onmessage = (event) => {
+            const messageData = JSON.parse(event.data);
+            console.log("Received message:", messageData);
+
+            setMessages((prevMessages) => [...prevMessages, messageData]);
+        };
+
+        ws.current.onerror = (error) => {
+            console.error("WebSocket Error:", error);
+        };
+
+        ws.current.onclose = () => {
+            console.log('WebSocket Disconnected');
+        };
+
+        return () => {
+            ws.current.close(); // Close the WebSocket connection on unmount
+        };
+    }, []);
 
     const handleSendMessage = () => {
         if (newMessage.trim() === '') return; // Can't send empty messages
@@ -29,14 +52,14 @@ export function Chat() {
         };
 
         setMessages(prevMessages => [...prevMessages, messageData]); // Update state with new message
+
+        if (ws.current.readyState === WebSocket.OPEN) {
+            ws.current.send(JSON.stringify(messageData)); // Send message via WebSocket
+        } else {
+            console.error("WebSocket not connected.");
+        }
+
         setNewMessage(''); // Clear input field
-
-        // Websocket Placeholder
-        console.log("Message to send:", messageData.text);
-
-        // setTimeout(() => {
-        //     messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-        // }, 100);
     };
 
     const handleKeyDown = (e) => {
