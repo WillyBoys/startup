@@ -9,6 +9,7 @@
 - [Canvas](https://byu.instructure.com)
 - [MDN](https://developer.mozilla.org)
 - [EmojiHub](https://github.com/cheatsnake/emojihub)
+- [Emoji API](https://emoji-api.com)
 
 ## AWS
 

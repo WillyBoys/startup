@@ -16,6 +16,10 @@ app.use(express.static('public')); // Serve static files
 app.use(cookieParser());
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("I'm watching you!");
+});
+
 const users = {};   // Store user credentials (in-memory for now)
 const sessions = {}; // Track logged-in users
 
