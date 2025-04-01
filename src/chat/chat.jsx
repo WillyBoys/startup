@@ -16,7 +16,7 @@ export function Chat() {
 
     useEffect(() => {
         // Initialize WebSocket connection
-        ws.current = new WebSocket('ws://localhost:4001'); // Adjust the WebSocket URL if needed
+        ws.current = new WebSocket('ws://localhost:4001');
 
         ws.current.onopen = () => {
             console.log('Connected to WebSocket');
@@ -51,8 +51,6 @@ export function Chat() {
             senderName: user
         };
 
-        setMessages(prevMessages => [...prevMessages, messageData]); // Update state with new message
-
         if (ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(JSON.stringify(messageData)); // Send message via WebSocket
         } else {
@@ -69,9 +67,24 @@ export function Chat() {
         }
     };
 
-    const handleEmojis = () => {
-        // Placeholder for emoji functionality
-        console.log("(: Emoji button clicked :)");
+    const [emojiList, setEmojiList] = useState([]);
+    const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
+
+    async function handleEmojis() {
+        try {
+            const response = await fetch('https://emojihub.xyz/api/all');
+            const data = await response.json();
+            setEmojiList(data); // Save emojis in state
+            setEmojiPickerVisible(true); // Show emoji picker UI
+        } catch (error) {
+            console.error("Error fetching emojis:", error);
+        }
+    }
+
+    // Function to add emoji to message
+    function addEmojiToMessage(emoji) {
+        setNewMessage((prev) => prev + emoji.character);
+        setEmojiPickerVisible(false); // Hide emoji picker
     }
 
     // Auto-scroll to the bottom of the chat
@@ -82,19 +95,19 @@ export function Chat() {
     }, [messages]);
 
     // Simulated WebSocket messages
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const messageData = {
-                text: 'We have been trying to reach you about your cars extended warranty',
-                sender: 'other',
-                senderName: 'TheRizzler'
-            };
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         const messageData = {
+    //             text: 'We have been trying to reach you about your cars extended warranty',
+    //             sender: 'other',
+    //             senderName: 'TheRizzler'
+    //         };
 
-            setMessages(prevMessages => [...prevMessages, messageData]);
-        }, 5000);
+    //         setMessages(prevMessages => [...prevMessages, messageData]);
+    //     }, 5000);
 
-        return () => clearInterval(interval);
-    }, []);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     return (
         <div>
