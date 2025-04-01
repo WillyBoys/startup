@@ -1,59 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import '../app.css';
-
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
 export function Users() {
-    const location = useLocation();
+    const navigate = useNavigate();
     const user = location.state?.username || localStorage.getItem('username');
 
-    //Using state to store users
+    //Using state to store users THIS IS HARD CODED
     const [users, setUsers] = useState([
         { name: user },
-        { name: 'TheRizzler' },
-        { name: 'User 3' },
-        { name: 'User 4' },
-        { name: 'User 5' }
     ]);
 
-    //Simulate users joining and leaving
-    //WILL BE CHANGED TO WEBSOCKET AND DATABASE
     useEffect(() => {
-        const interval = setInterval(() => {
-            setUsers(prevUsers => {
-                const randomUser = `User ${Math.floor(Math.random() * 10)}`;
-                const userExists = prevUsers.some(u => u.name === randomUser);
+        if (!user) {
+            navigate('/');  // Redirect if not logged in
+            return;
+        }
 
-                // 50% chance to add or remove a user
-                if (Math.random() > 0.5) {
-                    // If user doesn't exist, add them
-                    if (!userExists) {
-                        return [...prevUsers, { name: randomUser }];
-                    }
-                } else {
-                    // If more than one user in the list, remove one at random (excluding the first user)
-                    if (prevUsers.length > 1) {
-                        const removeIndex = Math.floor(Math.random() * (prevUsers.length - 1)) + 1;
-                        return prevUsers.filter((_, index) => index !== removeIndex);
-                    }
-                }
+        const ws = new WebSocket('ws://localhost:4001');
 
-                return prevUsers; // No change
-            });
-        }, 5000); // Runs every 5 seconds
+        ws.onopen = () => {
+            ws.send(JSON.stringify({ type: 'join', username: user }));
+        };
 
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, []);
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'updateUsers') {
+                setUsers(data.users);
+            }
+        };
 
-
+        return () => {
+            ws.send(JSON.stringify({ type: 'leave', username: user }));
+            ws.close();
+        };
+    }, [user, navigate]);
 
     return (
-        <body>
-            <header>
-                <h1 id="title">SkibidiChat</h1>
-                <img src="Logo1.png" alt="SkibidiChat Logo" id="logo"></img>
-            </header>
+        <div>
             <main>
                 <div className="user-list">
                     <nav className="chat-title">
@@ -67,6 +52,6 @@ export function Users() {
                     </ul>
                 </div>
             </main>
-        </body>
+        </div>
     );
 }
