@@ -683,3 +683,10 @@ body {
 .current-user {
   font-weight: bold;
 }
+
+.system-message {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+  margin: 10px 0;
+}

@@ -123,8 +123,6 @@ export function Chat() {
             senderName: user
         };
 
-        console.log("Sending message:", messageData);
-
         if (ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(JSON.stringify(messageData)); // Send message via WebSocket
         } else {
@@ -173,12 +171,27 @@ export function Chat() {
                     </NavLink>
                 </nav>
                 <div className="messages" ref={messagesContainerRef}>
-                    {messages.map((message, index) => (
-                        <div key={index} className={`message ${message.sender === user ? 'message-personal' : 'other'}`}>
-                            <strong>{message.senderName}: </strong>
-                            {message.text}
-                        </div>
-                    ))}
+                    {messages.map((message, index) => {
+                        if (message.type === 'system') {
+                            return (
+                                <div key={index} className="system-message">
+                                    <em>{message.text}</em>
+                                </div>
+                            );
+                        }
+
+                        if (message.type === 'message') {
+                            return (
+                                <div key={index} className={`message ${message.senderName === user ? 'message-personal' : 'other'}`}>
+                                    <strong>{message.senderName}: </strong>
+                                    {message.text}
+                                </div>
+                            );
+                        }
+
+                        return null; // Ignore unknown message types
+                    })}
+
                     <div ref={messagesEndRef} />
                 </div>
                 <div className="message-box">

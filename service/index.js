@@ -88,11 +88,34 @@ wss.on('connection', (ws) => {
       if (data.type === 'join' && data.username) {
         activeUsers.add(data.username);
         broadcastUserList();
+
+        //Broadcast "user joined" system message
+        const joinMessage = {
+          type: 'system',
+          text: `${data.username} has joined the chat`
+        };
+
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(joinMessage));
+          }
+        });
       }
 
       if (data.type === 'leave' && data.username) {
         activeUsers.delete(data.username);
         broadcastUserList();
+
+        const leaveMessage = {
+          type: 'system',
+          text: `${data.username} has left the chat`
+        };
+
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(leaveMessage));
+          }
+        });
       }
 
       if (data.type === 'message') {
