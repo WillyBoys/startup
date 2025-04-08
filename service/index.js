@@ -3,7 +3,8 @@ import cookieParser from 'cookie-parser';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import cors from 'cors';
-import { WebSocketServer, WebSocket } from 'ws';
+import { WebSocketServer } from 'ws';
+import cookie from 'cookie';
 import dotenv from 'dotenv';
 import { getUserByUsername, getUserByEmail, addUser } from './db.js';
 
@@ -11,14 +12,14 @@ dotenv.config();
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-const userSockets = new Map();
 
 app.use(express.json());
-app.use(express.static('public')); // Serve static files
+app.use(express.static('public'));
 app.use(cookieParser());
 app.use(cors({ credentials: true }));
 
-const sessions = {}; // Track logged-in users
+const sessions = {}; // sessionId -> username
+const sessionConnections = new Map(); // sessionId -> Set of sockets
 
 const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
@@ -27,7 +28,7 @@ app.get("/", (req, res) => {
   res.send("I'm watching you!");
 });
 
-// Authentication Routes
+// Register
 apiRouter.post('/register', async (req, res) => {
   const { username, password, email } = req.body;
 
@@ -44,6 +45,7 @@ apiRouter.post('/register', async (req, res) => {
   res.json({ success: true });
 });
 
+// Login
 apiRouter.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -59,6 +61,7 @@ apiRouter.post('/login', async (req, res) => {
   res.json({ success: true });
 });
 
+// Logout
 apiRouter.post('/logout', (req, res) => {
   const sessionId = req.cookies.sessionId;
   delete sessions[sessionId];
@@ -66,66 +69,57 @@ apiRouter.post('/logout', (req, res) => {
   res.json({ success: true });
 });
 
+// Session check
 apiRouter.get('/session', (req, res) => {
   const sessionId = req.cookies.sessionId;
-  if (!sessions[sessionId]) {
+  const username = sessions[sessionId];
+
+  if (!username) {
     return res.status(401).json({ error: 'Not logged in' });
   }
-  res.json({ username: sessions[sessionId] });
+
+  res.json({ username });
 });
 
-// WebSocket Server for Real-Time Chat
+// WebSocket
 const wss = new WebSocketServer({ port: 4001 });
 
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req) => {
+  const cookies = cookie.parse(req.headers.cookie || '');
+  const sessionId = cookies.sessionId;
+  const username = sessions[sessionId];
+
+  if (!sessionId || !username) {
+    ws.close();
+    return;
+  }
+
+  let sockets = sessionConnections.get(sessionId);
+  const isNewSession = !sockets;
+
+  if (!sockets) {
+    sockets = new Set();
+    sessionConnections.set(sessionId, sockets);
+  }
+
+  if (sockets.size === 0 && isNewSession) {
+    broadcastToAll({
+      type: 'system',
+      text: `${username} has joined the chat`
+    });
+  }
+
+  sockets.add(ws);
+  broadcastUserList();
+
   ws.on('message', (message) => {
     try {
       const data = JSON.parse(message);
-
-      if (data.type === 'join' && data.username) {
-        userSockets.set(ws, data.username);
-        broadcastUserList();
-
-        //Broadcast "user joined" system message
-        const joinMessage = {
-          type: 'system',
-          text: `${data.username} has joined the chat`
-        };
-
-        wss.clients.forEach((client) => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(joinMessage));
-          }
-        });
-      }
-
-      if (data.type === 'leave' && data.username) {
-        userSockets.delete(ws, data.username);
-        broadcastUserList();
-
-        const leaveMessage = {
-          type: 'system',
-          text: `${data.username} has left the chat`
-        };
-
-        wss.clients.forEach((client) => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(leaveMessage));
-          }
-        });
-      }
-
       if (data.type === 'message') {
-        const messageToSend = {
+        broadcastToAll({
           type: 'message',
           text: data.text,
-          senderName: data.senderName
-        };
-
-        wss.clients.forEach((client) => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(messageToSend));
-          }
+          senderName: username
         });
       }
     } catch (err) {
@@ -134,21 +128,46 @@ wss.on('connection', (ws) => {
   });
 
   ws.on('close', () => {
-    // Could implement cleanup logic based on sessions if needed
+    const sockets = sessionConnections.get(sessionId);
+    if (!sockets) return;
+
+    sockets.delete(ws);
+
+    if (sockets.size === 0) {
+      // Give the user a chance to reconnect (page reload, navigation)
+      setTimeout(() => {
+        const stillEmpty = !sessionConnections.get(sessionId) || sessionConnections.get(sessionId).size === 0;
+        if (stillEmpty) {
+          sessionConnections.delete(sessionId);
+          broadcastToAll({
+            type: 'system',
+            text: `${username} has left the chat`
+          });
+          broadcastUserList();
+        }
+      }, 4000); // Wait 4 seconds
+    }
+
+    broadcastUserList();
   });
 });
 
 function broadcastUserList() {
-  const userList = Array.from(userSockets.values()).map(name => ({ name }));
-  const message = JSON.stringify({ type: 'updateUsers', users: userList });
+  const users = Array.from(sessionConnections.keys()).map(sessionId => ({
+    name: sessions[sessionId]
+  }));
 
+  broadcastToAll({ type: 'updateUsers', users });
+}
+
+function broadcastToAll(message) {
+  const msg = JSON.stringify(message);
   wss.clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
+    if (client.readyState === client.OPEN) {
+      client.send(msg);
     }
   });
 }
-
 
 app.listen(port, () => {
   console.log(`Chat service running on http://localhost:${port}`);

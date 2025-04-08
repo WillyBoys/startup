@@ -46,37 +46,22 @@ export function Chat() {
     useEffect(() => {
         if (!user) return;
 
-        // Initialize WebSocket connection
-        ws.current = new WebSocket(`ws://${window.location.hostname}:4001`);
+        if (!ws.current || ws.current.readyState !== WebSocket.OPEN) {
+            ws.current = new WebSocket(`ws://${window.location.hostname}:4001`);
 
-        ws.current.onopen = () => {
-            //Tells the server that a user has joined
-            ws.current.send(JSON.stringify({
-                type: 'join',
-                username: user,
-            }));
-        };
+            ws.current.onmessage = (event) => {
+                const messageData = JSON.parse(event.data);
+                setMessages((prev) => [...prev, messageData]);
+            };
 
-        ws.current.onmessage = (event) => {
-            const messageData = JSON.parse(event.data);
-            setMessages((prevMessages) => [...prevMessages, messageData]);
-        };
+            ws.current.onerror = (error) => {
+                console.error("WebSocket error:", error);
+            };
+        }
 
-        ws.current.onerror = (error) => {
-            console.error("WebSocket Error:", error);
-        };
-
-        ws.current.onclose = () => {
-            ws.current.send(JSON.stringify({ type: 'leave', username: user }));
-        };
-
-        return () => {
-            if (ws.current.readyState === WebSocket.OPEN) {
-                ws.current.send(JSON.stringify({ type: 'leave', username: user }));
-            }
-            ws.current.close();
-        };
+        return () => { };
     }, [user]);
+
 
     // Auto-scroll to the bottom of the chat
     useEffect(() => {
