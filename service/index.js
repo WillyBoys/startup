@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import cors from 'cors';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket } from 'ws';
 import dotenv from 'dotenv';
 import { getUserByUsername, getUserByEmail, addUser } from './db.js';
 
@@ -80,6 +80,9 @@ const wss = new WebSocketServer({ port: 4001 });
 wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     try {
+
+      console.log("Received message:", message);
+
       const data = JSON.parse(message);
 
       if (data.type === 'join' && data.username) {
@@ -93,10 +96,17 @@ wss.on('connection', (ws) => {
       }
 
       if (data.type === 'message') {
-        // broadcast chat message
+        const messageToSend = {
+          type: 'message',
+          text: data.text,
+          senderName: data.senderName
+        };
+
+        console.log("Broadcasting message:", messageToSend);
+
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(data));
+            client.send(JSON.stringify(messageToSend));
           }
         });
       }

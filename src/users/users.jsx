@@ -37,7 +37,7 @@ export function Users() {
     useEffect(() => {
         if (!user) { return; }
 
-        const ws = new WebSocket('ws://localhost:4001');
+        const ws = new WebSocket(`ws://${window.location.hostname}:4001`);
 
         ws.onopen = () => {
             ws.send(JSON.stringify({ type: 'join', username: user }));
@@ -56,7 +56,7 @@ export function Users() {
             }
             ws.close();
         };
-    }, [user, navigate]);
+    }, [user]);
 
     return (
         <div>

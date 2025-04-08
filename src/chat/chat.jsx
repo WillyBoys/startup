@@ -44,17 +44,23 @@ export function Chat() {
     }, [navigate]);
 
     useEffect(() => {
+        if (!user) return;
+
         // Initialize WebSocket connection
-        ws.current = new WebSocket('ws://localhost:4001');
+        ws.current = new WebSocket(`ws://${window.location.hostname}:4001`);
 
         ws.current.onopen = () => {
             console.log('Connected to WebSocket');
+
+            //Tells the server that a user has joined
+            ws.current.send(JSON.stringify({
+                type: 'join',
+                username: user,
+            }));
         };
 
         ws.current.onmessage = (event) => {
             const messageData = JSON.parse(event.data);
-            console.log("Received message:", messageData);
-
             setMessages((prevMessages) => [...prevMessages, messageData]);
         };
 
@@ -67,9 +73,12 @@ export function Chat() {
         };
 
         return () => {
-            ws.current.close(); // Close the WebSocket connection on unmount
+            if (ws.current.readyState === WebSocket.OPEN) {
+                ws.current.send(JSON.stringify({ type: 'leave', username: user }));
+            }
+            ws.current.close();
         };
-    }, []);
+    }, [user]);
 
     // Auto-scroll to the bottom of the chat
     useEffect(() => {
@@ -109,10 +118,12 @@ export function Chat() {
         if (newMessage.trim() === '') return; // Can't send empty messages
 
         const messageData = {
+            type: 'message',
             text: newMessage,
-            sender: 'self',
             senderName: user
         };
+
+        console.log("Sending message:", messageData);
 
         if (ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(JSON.stringify(messageData)); // Send message via WebSocket
@@ -163,7 +174,7 @@ export function Chat() {
                 </nav>
                 <div className="messages" ref={messagesContainerRef}>
                     {messages.map((message, index) => (
-                        <div key={index} className={`message ${message.sender === 'self' ? 'message-personal' : 'other'}`}>
+                        <div key={index} className={`message ${message.sender === user ? 'message-personal' : 'other'}`}>
                             <strong>{message.senderName}: </strong>
                             {message.text}
                         </div>
