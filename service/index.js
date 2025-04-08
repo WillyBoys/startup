@@ -5,43 +5,53 @@ import { v4 as uuidv4 } from 'uuid';
 import cors from 'cors';
 import { WebSocketServer } from 'ws';
 import dotenv from 'dotenv';
+import { getUserByUsername, getUserByEmail, addUser } from './db.js';
 
 dotenv.config();
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
+const activeUsers = new Set(); // Track active users
 
 app.use(express.json());
 app.use(express.static('public')); // Serve static files
 app.use(cookieParser());
 app.use(cors({ credentials: true }));
 
-app.get("/", (req, res) => {
-  res.send("I'm watching you!");
-});
-
-const users = {};   // Store user credentials (in-memory for now)
 const sessions = {}; // Track logged-in users
 
 const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-// Authentication Routes
-apiRouter.post('/register', (req, res) => {
-  const { username, password, email } = req.body;
-  if (users[username]) return res.status(400).json({ error: 'User already exists' });
+app.get("/", (req, res) => {
+  res.send("I'm watching you!");
+});
 
-  users[username] = { password: bcrypt.hashSync(password, 10), email };
+// Authentication Routes
+apiRouter.post('/register', async (req, res) => {
+  const { username, password, email } = req.body;
+
+  const existingUser = await getUserByUsername(username);
+  const existingEmail = await getUserByEmail(email);
+
+  if (existingUser || existingEmail) {
+    return res.status(400).json({ error: 'Username or email already exists' });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await addUser({ username, password: hashedPassword, email });
+
   res.json({ success: true });
 });
 
-apiRouter.post('/login', (req, res) => {
-  console.log("Login attempt:", req.body);
-  const username = req.body.username;
-  const password = req.body.password;
-  if (!users[username] || !bcrypt.compareSync(password, users[username].password)) {
-    return res.status(401).json({ error: 'Invalid credentials' });
-  }
+apiRouter.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = await getUserByUsername(username);
+  if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
   const sessionId = uuidv4();
   sessions[sessionId] = username;
@@ -69,9 +79,48 @@ const wss = new WebSocketServer({ port: 4001 });
 
 wss.on('connection', (ws) => {
   ws.on('message', (message) => {
-    wss.clients.forEach(client => client.send(message.toString()));
+    try {
+      const data = JSON.parse(message);
+
+      if (data.type === 'join' && data.username) {
+        activeUsers.add(data.username);
+        broadcastUserList();
+      }
+
+      if (data.type === 'leave' && data.username) {
+        activeUsers.delete(data.username);
+        broadcastUserList();
+      }
+
+      if (data.type === 'message') {
+        // broadcast chat message
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(data));
+          }
+        });
+      }
+    } catch (err) {
+      console.error('WebSocket message error:', err);
+    }
+  });
+
+  ws.on('close', () => {
+    // Could implement cleanup logic based on sessions if needed
   });
 });
+
+function broadcastUserList() {
+  const userList = Array.from(activeUsers).map(name => ({ name }));
+  const message = JSON.stringify({ type: 'updateUsers', users: userList });
+
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
+  });
+}
+
 
 app.listen(port, () => {
   console.log(`Chat service running on http://localhost:${port}`);

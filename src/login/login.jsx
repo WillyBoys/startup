@@ -76,7 +76,7 @@ export function Login({ setUser }) {
                 setUser(data.username);
                 setTimeout(() => navigate('/chat', { state: { username: data.username } }), 0);
             } else {
-                setError(data.message || 'Login failed');
+                setError(data.error || 'Login failed');
             }
         } catch (err) {
             setError('Server error. Try again later.');
@@ -98,7 +98,7 @@ export function Login({ setUser }) {
                 setError('Registration successful! Please log in.');
                 setIsRegistering(false);
             } else {
-                setError(data.message || 'Registration failed');
+                setError(data.error || 'Registration failed');
             }
         } catch (err) {
             setError('Server error. Try again later.');

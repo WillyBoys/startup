@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '../app.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
 export function Chat() {
@@ -12,8 +12,8 @@ export function Chat() {
     const messagesEndRef = useRef(null);
     const ws = useRef(null); // WebSocket reference
 
-    const location = useLocation();
-    const user = location.state?.username || localStorage.getItem('username');
+    const [user, setUser] = useState('');
+
 
     const [emojiList, setEmojiList] = useState([]);
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
@@ -25,16 +25,21 @@ export function Chat() {
                     method: 'GET',
                     credentials: 'include',
                 });
-                if (!response.ok) {
-                    navigate('/'); // Redirect to login if not authenticated
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setUser(data.username); // Set the current user's username
+                } else {
+                    navigate('/');
                 }
             } catch (error) {
                 console.error("Session check failed:", error);
                 navigate('/');
             } finally {
-                setIsLoading(false); // Set loading to false after checking session
+                setIsLoading(false);
             }
         }
+
         checkSession();
     }, [navigate]);
 
@@ -137,7 +142,6 @@ export function Chat() {
             });
 
             if (response.ok) {
-                localStorage.removeItem('username'); // Clear stored username
                 window.location.href = '/'; // Redirect to login/homepage
             } else {
                 console.error('Logout failed');
@@ -151,7 +155,7 @@ export function Chat() {
         <div>
             <div className="chat">
                 <nav className="chat-title">
-                    <h2 className="sigmas-title">{user}</h2>
+                    <h2 className="sigmas-title">{user || 'Alpha Rizzler'}</h2>
                     <NavLink to="/users"><button className="sigmas">Sigmas</button></NavLink>
                     <NavLink to="/" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
                         <button className="logout">Logout</button>
