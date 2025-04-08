@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-const activeUsers = new Set(); // Track active users
+const userSockets = new Map();
 
 app.use(express.json());
 app.use(express.static('public')); // Serve static files
@@ -80,13 +80,10 @@ const wss = new WebSocketServer({ port: 4001 });
 wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     try {
-
-      console.log("Received message:", message);
-
       const data = JSON.parse(message);
 
       if (data.type === 'join' && data.username) {
-        activeUsers.add(data.username);
+        userSockets.set(ws, data.username);
         broadcastUserList();
 
         //Broadcast "user joined" system message
@@ -103,7 +100,7 @@ wss.on('connection', (ws) => {
       }
 
       if (data.type === 'leave' && data.username) {
-        activeUsers.delete(data.username);
+        userSockets.delete(ws, data.username);
         broadcastUserList();
 
         const leaveMessage = {
@@ -125,8 +122,6 @@ wss.on('connection', (ws) => {
           senderName: data.senderName
         };
 
-        console.log("Broadcasting message:", messageToSend);
-
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify(messageToSend));
@@ -144,7 +139,7 @@ wss.on('connection', (ws) => {
 });
 
 function broadcastUserList() {
-  const userList = Array.from(activeUsers).map(name => ({ name }));
+  const userList = Array.from(userSockets.values()).map(name => ({ name }));
   const message = JSON.stringify({ type: 'updateUsers', users: userList });
 
   wss.clients.forEach(client => {

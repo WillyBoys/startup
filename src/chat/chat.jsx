@@ -50,8 +50,6 @@ export function Chat() {
         ws.current = new WebSocket(`ws://${window.location.hostname}:4001`);
 
         ws.current.onopen = () => {
-            console.log('Connected to WebSocket');
-
             //Tells the server that a user has joined
             ws.current.send(JSON.stringify({
                 type: 'join',
@@ -69,7 +67,7 @@ export function Chat() {
         };
 
         ws.current.onclose = () => {
-            console.log('WebSocket Disconnected');
+            ws.current.send(JSON.stringify({ type: 'leave', username: user }));
         };
 
         return () => {

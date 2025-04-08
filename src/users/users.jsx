@@ -48,6 +48,10 @@ export function Users() {
             if (data.type === 'updateUsers') {
                 setUsers(data.users);
             }
+
+            if (data.type === 'system') {
+                console.log("System message:", data.text);
+            }
         };
 
         return () => {
