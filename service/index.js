@@ -81,8 +81,13 @@ apiRouter.get('/session', (req, res) => {
   res.json({ username });
 });
 
+// App Listeniing and assigned to httpService
+const httpService = app.listen(port, () => {
+  console.log(`Chat service running on http://localhost:${port}`);
+});
+
 // WebSocket
-const wss = new WebSocketServer({ port: 4001 });
+const wss = new WebSocketServer({ server: httpService });
 
 wss.on('connection', (ws, req) => {
   const cookies = cookie.parse(req.headers.cookie || '');
@@ -168,7 +173,3 @@ function broadcastToAll(message) {
     }
   });
 }
-
-app.listen(port, () => {
-  console.log(`Chat service running on http://localhost:${port}`);
-});

@@ -11,6 +11,8 @@ export function Chat() {
     const messagesContainerRef = useRef(null);
     const messagesEndRef = useRef(null);
     const ws = useRef(null); // WebSocket reference
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const port = window.location.port;
 
     const [user, setUser] = useState('');
 
@@ -47,7 +49,7 @@ export function Chat() {
         if (!user) return;
 
         if (!ws.current || ws.current.readyState !== WebSocket.OPEN) {
-            ws.current = new WebSocket(`ws://${window.location.hostname}:4001`);
+            ws.current = new WebSocket(`${protocol}://${window.location.hostname}:${port}/ws`);
 
             ws.current.onmessage = (event) => {
                 const messageData = JSON.parse(event.data);

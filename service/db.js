@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import config from '../dbConfig.json' with { type: 'json' };
+import config from './dbConfig.json' with { type: 'json' };
 
 const encodedPassword = encodeURIComponent(config.password);
 const url = `mongodb+srv://${config.username}:${encodedPassword}@${config.hostname}`;

@@ -5,6 +5,8 @@ import { NavLink } from 'react-router-dom';
 
 export function Users() {
     const navigate = useNavigate();
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const port = window.location.port;
 
     //Using state to store users THIS IS HARD CODED
     const [user, setUser] = useState('');
@@ -37,7 +39,7 @@ export function Users() {
     useEffect(() => {
         if (!user) { return; }
 
-        const ws = new WebSocket(`ws://${window.location.hostname}:4001`);
+        const ws = new WebSocket(`${protocol}://${window.location.hostname}:${port}/ws`);
 
         ws.onopen = () => {
             ws.send(JSON.stringify({ type: 'join', username: user }));
