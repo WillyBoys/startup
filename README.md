@@ -110,25 +110,25 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Node.js/Express HTTP service** - I packaged everything into the service directory and have it so that the service can run and handle different endpoints that connect.
 - [x] **Static middleware for frontend** - I have mine set up so that express serves files from the public folder
 - [x] **Calls to third party endpoints** - My emoji button calls another API and presents them for selection for the user
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
+- [x] **Backend service endpoints** - I was able to set up my app so that it calls the endpoints in the backend as opposed to hardcoding the navigation
+- [x] **Frontend calls service endpoints** - When clicking the buttons, it navigates via the backend as well as when chatting, it accesses the websocket which is also tied to the service
 
 ## 🚀 DB/Login deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **User registration** - I did not complete this part of the deliverable.
-- [ ] **User login and logout** - I did not complete this part of the deliverable.
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Restricts functionality based on authentication** - I did not complete this part of the deliverable.
+- [x] **User registration** - The user is able to register so that they can login and be authenticated
+- [x] **User login and logout** - The user is able to login and logout but when they logout, they must login first. They also must login before they can access other sites
+- [x] **Stores data in MongoDB** - The user information is stored in the mongo database and is persistent
+- [x] **Stores credentials in MongoDB** - The user information is stored in the mongo database and is persistent
+- [x] **Restricts functionality based on authentication** - The user cannot access the other sites without first logging in
 
 ## 🚀 WebSocket deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [x] **Backend listens for WebSocket connection** - The backend is set up to listen for the connection
+- [x] **Frontend makes WebSocket connection** - After logging in, there is a websocket connection made
+- [x] **Data sent over WebSocket connection** - Sending messages sends them over the websocket. It also sends messages when people log in and log out
+- [x] **WebSocket data displayed** - The messages are broadcasted and displayed for the users
+- [x] **Application is fully functional** - My application has all the necessary functionality to work
